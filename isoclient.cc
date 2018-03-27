@@ -22,20 +22,23 @@ int main(int argc, char* argv[])
 
 	int sockfd = socket(PF_INET, SOCK_STREAM, 0);
 	if(sockfd < 0){
-		fprintf(stderr, "Socket error: %s", strerror(errno));
+		fprintf(stderr, "Socket error: %s\n", strerror(errno));
 		return -1;
 	}
 
 	if(connect(sockfd, (struct sockaddr*) &srv_addr, sizeof(srv_addr)) < 0){
-		fprintf(stderr, "Error connecting to %s:%d : %s", srv_name, port, strerror(errno));
+		fprintf(stderr, "Error connecting to %s:%d : %s\n", srv_name, port, strerror(errno));
 		return -1;
 	}
 
-	const char* data = "iddqd";
-	send(sockfd, data, strlen(data), 0);
+	const char* data = "00039" "0800" "\x82\x20\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00" "0314161430000030001";
+	int data_len = 44;
+	send(sockfd, data, data_len, 0);
+	fprintf(stdout, "%d bytes sent\n", data_len);
 
 	char buf[MAXBUFLEN];
-	recv(sockfd, buf, MAXBUFLEN, 0);
+	int nbytes = recv(sockfd, buf, MAXBUFLEN, 0);
+	fprintf(stdout, "%d bytes received\n", nbytes);
 
 	close(sockfd);
 }
