@@ -3,6 +3,5 @@
 **/*.swp
 **/*.gch
 
-bin/tests
-bin/ipsilon
+isoclient
 core
