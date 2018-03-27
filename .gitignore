@@ -1,0 +1,8 @@
+**/*.o
+**/*.orig
+**/*.swp
+**/*.gch
+
+bin/tests
+bin/ipsilon
+core
