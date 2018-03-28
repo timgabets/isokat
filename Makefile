@@ -1,12 +1,9 @@
 CC=g++
 CFLAGS=-g -Wall -O0
-BIN=isoclient
 
-isoclient: isoclient.cc
-	$(CC) $(CFLAGS) isoclient.cc -o $@
-
-all: $(BIN)
+bin/isoclient: src/isoclient.cc
+	$(CC) $(CFLAGS) src/isoclient.cc -o $@
 
 clean:
-	@rm -f ./*.o $(BIN)
+	@rm -f ./*.o bin/*
 

@@ -3,5 +3,6 @@
 **/*.swp
 **/*.gch
 
-isoclient
+bin/*
+obj/*
 core
