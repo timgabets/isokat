@@ -5,20 +5,20 @@ OBJS=obj/log.o
 TESTOBJS=obj/dummy.o obj/bitops_suite.o
 
 bin/isoclient: src/isoclient.cc $(OBJS)
-	$(CC) $(CFLAGS) -c src/isoclient.cc -o obj/isoclient.o
+	$(CC) $(CFLAGS) -c $< -o obj/isoclient.o
 	$(CC) $(CFLAGS) $(OBJS) obj/isoclient.o -o $@
 
 obj/log.o: src/log.cc
-	$(CC) $(CFLAGS) -c src/log.cc -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 obj/dummy.o: tests/dummy.cc
-	$(CC) $(CFLAGS) -c tests/dummy.cc -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 obj/bitops_suite.o: tests/bitops_suite.cc
-	$(CC) $(CFLAGS) -c tests/bitops_suite.cc -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 test: tests/main.cc $(TESTOBJS)
-	$(CC) $(CFLAGS) -c tests/main.cc -o obj/main.o
+	$(CC) $(CFLAGS) -c $< -o obj/main.o
 	$(CC) $(CFLAGS) $(TESTOBJS) obj/main.o -o bin/tests
 	@bin/tests
 
