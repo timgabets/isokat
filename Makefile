@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-g -std=c++11 -Wall -Wno-write-strings -O0 -I./include -DLOG_USE_COLOR
 
 OBJS=obj/log.o
-TESTOBJS=obj/dummy.o
+TESTOBJS=obj/dummy.o obj/bitops_suite.o
 
 bin/isoclient: src/isoclient.cc $(OBJS)
 	$(CC) $(CFLAGS) -c src/isoclient.cc -o obj/isoclient.o
@@ -13,6 +13,9 @@ obj/log.o: src/log.cc
 
 obj/dummy.o: tests/dummy.cc
 	$(CC) $(CFLAGS) -c tests/dummy.cc -o $@
+
+obj/bitops_suite.o: tests/bitops_suite.cc
+	$(CC) $(CFLAGS) -c tests/bitops_suite.cc -o $@
 
 test: tests/main.cc $(TESTOBJS)
 	$(CC) $(CFLAGS) -c tests/main.cc -o obj/main.o
