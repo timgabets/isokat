@@ -3,6 +3,7 @@
 **/*.swp
 **/*.gch
 
-bin/*
+bin/isoclient
+bin/tests
 obj/*
 core

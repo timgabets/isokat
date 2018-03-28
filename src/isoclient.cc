@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
 	const char* data = "00039" "0800" "\x82\x20\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00" "0314161430000030001";
 	int data_len = 44;
 	send(sockfd, data, data_len, 0);
-	log_trace("%d bytes sent\n", data_len);
+	log_trace("%d bytes sent", data_len);
 
 	char buf[MAXBUFLEN];
 	int nbytes = recv(sockfd, buf, MAXBUFLEN, 0);
-	log_trace("%d bytes received\n", nbytes);
+	log_trace("%d bytes received", nbytes);
 
 	close(sockfd);
 }
