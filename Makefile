@@ -26,3 +26,7 @@ test: tests/main.cc $(TESTOBJS)
 clean:
 	@rm -f obj/*.o bin/isoclient
 
+CODE_STYLE_OPTIONS=--style=linux --indent=tab -T8
+indent:
+	@astyle $(CODE_STYLE_OPTIONS) include/*.hh
+	@astyle $(CODE_STYLE_OPTIONS) src/*.cc
