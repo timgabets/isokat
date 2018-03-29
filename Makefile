@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-g -std=c++11 -Wall -Wno-write-strings -O0 -I./include -I/usr/include/libxml2 -DLOG_USE_COLOR
 LIBS=-lxml2
 
-OBJS=obj/log.o
+OBJS=obj/log.o obj/xmlparser.o
 TESTOBJS=obj/dummy.o obj/bitops_suite.o
 
 bin/isoclient: src/isoclient.cc $(OBJS)
@@ -10,6 +10,9 @@ bin/isoclient: src/isoclient.cc $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) obj/isoclient.o -o $@ $(LIBS)
 
 obj/log.o: src/log.cc
+	$(CC) $(CFLAGS) -c $< -o $@
+
+obj/xmlparser.o: src/xmlparser.cc
 	$(CC) $(CFLAGS) -c $< -o $@
 
 obj/dummy.o: tests/dummy.cc
