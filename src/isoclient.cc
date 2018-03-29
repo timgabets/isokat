@@ -10,16 +10,13 @@
 
 #define MAXBUFLEN 1024
 
-static void
-processNode(xmlTextReaderPtr reader)
+static void processNode(xmlTextReaderPtr reader)
 {
-	const xmlChar *name, *value;
-
-	name = xmlTextReaderConstName(reader);
+	const xmlChar* name = xmlTextReaderConstName(reader);
 	if (name == NULL)
 		name = BAD_CAST "--";
 
-	value = xmlTextReaderConstValue(reader);
+	const xmlChar* value = xmlTextReaderConstValue(reader);
 
 	printf("%d %d %s %d %d",
 	       xmlTextReaderDepth(reader),
@@ -37,21 +34,11 @@ processNode(xmlTextReaderPtr reader)
 	}
 }
 
-/**
- * streamFile:
- * @filename: the file name to parse
- *
- * Parse and print information about an XML file.
- */
-static void
-streamFile(const char *filename)
+static void streamFile(const char *filename)
 {
-	xmlTextReaderPtr reader;
-	int ret;
-
-	reader = xmlReaderForFile(filename, NULL, 0);
+	xmlTextReaderPtr reader = xmlReaderForFile(filename, NULL, 0);
 	if (reader != NULL) {
-		ret = xmlTextReaderRead(reader);
+		int ret = xmlTextReaderRead(reader);
 		while (ret == 1) {
 			processNode(reader);
 			ret = xmlTextReaderRead(reader);
@@ -76,7 +63,6 @@ int main(int argc, char* argv[])
 	xmlMemoryDump();
 
 	exit(0);
-
 
 	//
 	const char* srv_name = "localhost";
