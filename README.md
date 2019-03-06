@@ -7,9 +7,12 @@ ISOClient преобразует полученные http-запросы в ф�
 HTTP client <--JSON--> |    IsoClient     | <--VISA SMS/DMS--> |   Authorization    |  
                        |                  | <-- Mastercard --> |        Host        |  
                        +------------------+                    +--------------------+
+                                                                                     
+
 
 ### Используемые библиотеки
 * meson
 * libconfig
 * [kcgi](https://kristaps.bsd.lv/kcgi/)
 * [libuv](http://libuv.org/)
+* [criterion](https://github.com/Snaipe/Criterion)
