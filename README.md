@@ -1,2 +1,14 @@
-Usage:
- ./isoclient -s iso8583.xml -f testcases.xml
+## ISOClient
+
+ISOClient преобразует полученные http-запросы в финансовые сообщения в формате [ISO8583](https://en.wikipedia.org/wiki/ISO_8583), специфичные для различных платёжных систем (VISA, Mastercard, МИР). Основное предназначение - тестирование авторизационных систем банков-эмитентов.
+
+                       +------------------+                +--------------------+
+HTTP client <--JSON--> |    IsoClient     | <--ISO 8583--> |    Issuer Bank     |
+                       |                  |                | Authorization Host |  
+                       +------------------+                +--------------------+
+
+### Используемые библиотеки
+* meson
+* libconfig
+* [kcgi](https://kristaps.bsd.lv/kcgi/)
+* [libuv](http://libuv.org/)
