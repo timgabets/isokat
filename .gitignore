@@ -2,8 +2,4 @@
 **/*.orig
 **/*.swp
 **/*.gch
-
-bin/isoclient
-bin/tests
-obj/*
-core
+build/
