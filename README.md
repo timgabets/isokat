@@ -8,9 +8,14 @@ ISOClient преобразует полученные http-запросы в ф�
                            |                  | <-- Mastercard --> |        Host        |  
                            +------------------+                    +--------------------+
 
+### Build
+
+
 ### Используемые библиотеки
 * meson
 * libconfig
 * [kcgi](https://kristaps.bsd.lv/kcgi/)
 * [libuv](http://libuv.org/)
 * [criterion](https://github.com/Snaipe/Criterion)
+* [zflog](https://github.com/wonder-mice/zf_log)
+
