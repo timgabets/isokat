@@ -195,9 +195,8 @@
  */
 #ifndef ZF_LOG_MESSAGE_CTX_FORMAT
 	#define ZF_LOG_MESSAGE_CTX_FORMAT \
-		(MONTH, S("-"), DAY, S(ZF_LOG_DEF_DELIMITER), \
+		(YEAR, S("-"), MONTH, S("-"), DAY, S(ZF_LOG_DEF_DELIMITER), \
 		 HOUR, S(":"), MINUTE, S(":"), SECOND, S("."), MILLISECOND, S(ZF_LOG_DEF_DELIMITER), \
-		 PID, S(ZF_LOG_DEF_DELIMITER), TID, S(ZF_LOG_DEF_DELIMITER), \
 		 LEVEL, S(ZF_LOG_DEF_DELIMITER))
 #endif
 /* Example:
@@ -510,7 +509,6 @@ typedef struct mem_block
 mem_block;
 
 static void time_callback(struct tm *const tm, unsigned *const usec);
-static void pid_callback(int *const pid, int *const tid);
 static void buffer_callback(zf_log_message *msg, char *buf);
 
 STATIC_ASSERT(eol_fits_eol_sz, sizeof(ZF_LOG_EOL) <= ZF_LOG_EOL_SZ);
@@ -523,7 +521,6 @@ static const char c_hex[] = "0123456789abcdef";
 
 static INSTRUMENTED_CONST unsigned g_buf_sz = ZF_LOG_BUF_SZ - ZF_LOG_EOL_SZ;
 static INSTRUMENTED_CONST time_cb g_time_cb = time_callback;
-static INSTRUMENTED_CONST pid_cb g_pid_cb = pid_callback;
 static INSTRUMENTED_CONST buffer_cb g_buffer_cb = buffer_callback;
 
 #if ZF_LOG_USE_ANDROID_LOG
@@ -789,35 +786,6 @@ static void time_callback(struct tm *const tm, unsigned *const msec)
 		}
 		#endif
 	*msec = (unsigned)tv.tv_usec / 1000;
-	#endif
-#endif
-}
-
-static void pid_callback(int *const pid, int *const tid)
-{
-#if !_ZF_LOG_MESSAGE_FORMAT_CONTAINS(PID, ZF_LOG_MESSAGE_CTX_FORMAT)
-	VAR_UNUSED(pid);
-#else
-	#if defined(_WIN32) || defined(_WIN64)
-	*pid = GetCurrentProcessId();
-	#else
-	*pid = getpid();
-	#endif
-#endif
-
-#if !_ZF_LOG_MESSAGE_FORMAT_CONTAINS(TID, ZF_LOG_MESSAGE_CTX_FORMAT)
-	VAR_UNUSED(tid);
-#else
-	#if defined(_WIN32) || defined(_WIN64)
-	*tid = GetCurrentThreadId();
-	#elif defined(__ANDROID__)
-	*tid = gettid();
-	#elif defined(__linux__)
-	*tid = syscall(SYS_gettid);
-	#elif defined(__MACH__)
-	*tid = (int)pthread_mach_thread_np(pthread_self());
-	#else
-		#define Platform not supported
 	#endif
 #endif
 }
