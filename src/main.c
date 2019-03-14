@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <zf_log.h>
 
 int main(int argc, char* argv[])
 {
-	printf("Hello, world!\n");
+	ZF_LOGI("Hello, world!");
 }
 
