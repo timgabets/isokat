@@ -1,7 +1,8 @@
 project('isocat', 'c',
 	version: '0.1.1',
 	default_options: [
-		'c_std=c11'
+		'c_std=c11',
+		'werror=true',
 	])
 
 src = [
