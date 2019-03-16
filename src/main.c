@@ -67,9 +67,8 @@ int main(int argc, char* argv[])
 	if(n_bytes == -1) {
 		ZF_LOGF("read() error: %s", strerror(errno));
 		return -1;
-	} else {
+	} else
 		ZF_LOGI_MEM(buf, n_bytes, "Data received:");
-	}
 
 	close(s);
 }
