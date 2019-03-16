@@ -4,14 +4,18 @@ ISOCat преобразует полученные http-запросы в фин
 
                            +------------------+                    +--------------------+
                            |                  | <--  ISO 8583  --> |    Issuer Bank     |
-    HTTP client <--JSON--> |    IsoClient     | <--VISA SMS/DMS--> |   Authorization    |  
-                           |                  | <-- Mastercard --> |        Host        |  
+    HTTP client <--JSON--> |    IsoClient     | <--VISA SMS/DMS--> |   Authorization    |
+                           |                  | <-- Mastercard --> |        Host        |
                            +------------------+                    +--------------------+
 
 ### Build
 > meson build
 > cd build
-> ninja 
+> ninja
+
+## Testing with curl
+> curl --header "Content-Type: application/json" --request GET --data '{"username":"xyz","password":"xyz"}' localhost:8080
+
 
 ### Используемые библиотеки
 * meson
