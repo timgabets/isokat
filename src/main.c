@@ -14,10 +14,26 @@
 
 #define MAXBUFLEN 4096
 
+int header_field_cb(http_parser* parser, const char *at, size_t length)
+{
+	// TODO: checking Content-Type and Content-Length
+	ZF_LOGI_MEM(at, length, "%zu bytes", length);
+	return 0;
+}
+
+int header_value_cb(http_parser* parser, const char *at, size_t length)
+{
+	// TODO: checking Content-Type and Content-Length
+	ZF_LOGI_MEM(at, length, "%zu bytes", length);
+	return 0;
+}
+
 int process_http_request(const char* buf, size_t n_bytes)
 {
 	http_parser_settings settings;
 	memset(&settings, 0, sizeof(settings));
+	settings.on_header_field = header_field_cb;
+	settings.on_header_value = header_value_cb;
 
 	http_parser *p = malloc(sizeof(http_parser));
 	http_parser_init(p, HTTP_REQUEST);

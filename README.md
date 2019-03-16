@@ -9,9 +9,9 @@ ISOCat преобразует полученные http-запросы в фин
                            +------------------+                    +--------------------+
 
 ### Build
-> meson build
-> cd build
-> ninja
+    meson build
+    cd build
+    ninja
 
 ## Testing with curl
 > curl --header "Content-Type: application/json" --request GET --data '{"username":"xyz","password":"xyz"}' localhost:8080
