@@ -11,14 +11,14 @@
 
 int main(int argc, char* argv[])
 {
-	int sockfd = socket(PF_INET, SOCK_STREAM, 0);
-	if(sockfd < 0) {
+	int s = socket(PF_INET, SOCK_STREAM, 0);
+	if(s < 0) {
 		ZF_LOGF("socket() error: %s", strerror(errno));
 		return -1;
 	}
 
 	int optval = 1;
-	if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
+	if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
 		ZF_LOGW("Error setting SO_REUSEADDR: %s", strerror(errno));
 
 	const char* host = "localhost";
@@ -36,22 +36,30 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	if(bind(sockfd, res->ai_addr, res->ai_addrlen) != 0) {
+	if(bind(s, res->ai_addr, res->ai_addrlen) != 0) {
 		ZF_LOGF("Error binding socket: %s", strerror(errno));
 		return -1;
 	}
 
 	freeaddrinfo(res);
 
-	if(listen(sockfd, SOMAXCONN) != 0) {
+	if(listen(s, SOMAXCONN) != 0) {
 		ZF_LOGF("listen() error: %s", strerror(errno));
 		return -1;
 	}
 
 	ZF_LOGI("Listening to %s:%s", host, service);
 
+	struct sockaddr addr;
+	socklen_t addrlen = sizeof(addr);
+	int conn_sock = accept(s, &addr, &addrlen);
+	if(conn_sock == -1) {
+		ZF_LOGF("Error accepting new connection: %s", strerror(errno));
+		return -1;
+	}
 
-	ZF_LOGI("Hello, world!");
-	close(sockfd);
+	ZF_LOGI("New connected client"); // TODO: show IP connected
+
+	close(s);
 }
 
