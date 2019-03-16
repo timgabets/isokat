@@ -68,8 +68,22 @@ int main(int argc, char* argv[])
 		ZF_LOGF("read() error: %s", strerror(errno));
 		return -1;
 	} else
-		ZF_LOGI_MEM(buf, n_bytes, "Data received:");
+		ZF_LOGI_MEM(buf, n_bytes, "%d bytes received", n_bytes);
 
-	close(s);
+	strcpy(buf, "HTTP/1.1 200 OK\r\n");
+	n_bytes = write(conn_sock, buf, strlen(buf));
+
+	if(n_bytes == -1) {
+		ZF_LOGF("write() error: %s", strerror(errno));
+		return -1;
+	} else
+		ZF_LOGI_MEM(buf, n_bytes, "%d bytes written", n_bytes);
+
+	if(close(s) == 0)
+		ZF_LOGI("Connection closed.");
+	else
+		ZF_LOGE("Error closing socket: %s", strerror(errno));
+
+	return 0;
 }
 
