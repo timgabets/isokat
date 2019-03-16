@@ -63,9 +63,9 @@ int main(int argc, char* argv[])
 	ZF_LOGI("New connected client"); // TODO: show IP connected
 
 	char buf[MAXBUFLEN] = {0};
-	int n_bytes = read(conn_sock, buf, MAXBUFLEN);
+	int n_bytes = recv(conn_sock, buf, MAXBUFLEN, 0);
 	if(n_bytes == -1) {
-		ZF_LOGF("read() error: %s", strerror(errno));
+		ZF_LOGF("recv() error: %s", strerror(errno));
 		return -1;
 	} else
 		ZF_LOGI_MEM(buf, n_bytes, "%d bytes received", n_bytes);
