@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <zf_log.h>
 
+#define MAXBUFLEN 4096
+
 int main(int argc, char* argv[])
 {
 	int s = socket(PF_INET, SOCK_STREAM, 0);
@@ -59,6 +61,15 @@ int main(int argc, char* argv[])
 	}
 
 	ZF_LOGI("New connected client"); // TODO: show IP connected
+
+	char buf[MAXBUFLEN] = {0};
+	int n_bytes = read(conn_sock, buf, MAXBUFLEN);
+	if(n_bytes == -1) {
+		ZF_LOGF("read() error: %s", strerror(errno));
+		return -1;
+	} else {
+		ZF_LOGI_MEM(buf, n_bytes, "Data received:");
+	}
 
 	close(s);
 }

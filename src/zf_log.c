@@ -124,7 +124,7 @@
  * ZF_LOG_BUF_SZ also must be increased.
  */
 #ifndef ZF_LOG_MEM_WIDTH
-	#define ZF_LOG_MEM_WIDTH 32
+	#define ZF_LOG_MEM_WIDTH 16
 #endif
 /* String to put in the end of each log line (can be empty). Its value used by
  * stderr output callback. Its size used as a default value for ZF_LOG_EOL_SZ.
@@ -1144,7 +1144,7 @@ static void output_mem(const zf_log_spec *log, zf_log_message *const msg,
 	const unsigned char *mem_cut;
 	const ptrdiff_t mem_width = (ptrdiff_t)log->format->mem_width;
 	char *const hex_b = msg->msg_b;
-	char *const ascii_b = hex_b + 2 * mem_width + 2;
+	char *const ascii_b = hex_b + 3 * mem_width + 2;
 	char *const ascii_e = ascii_b + mem_width;
 	if (msg->e < ascii_e)
 	{
@@ -1160,7 +1160,8 @@ static void output_mem(const zf_log_spec *log, zf_log_message *const msg,
 			const unsigned char ch = *mem_p;
 			*hex++ = c_hex[(0xf0 & ch) >> 4];
 			*hex++ = c_hex[(0x0f & ch)];
-			*ascii++ = isprint(ch)? (char)ch: '?';
+			*hex++ = ' ';
+			*ascii++ = isprint(ch)? (char)ch: '.';
 		}
 		while (hex != ascii_b)
 		{
