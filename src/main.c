@@ -155,6 +155,9 @@ int main(int argc, char* argv[])
 
 	ZF_LOGI_MEM(ctx->data, ctx->len, "Body data (%zu bytes):", ctx->len);
 
+	/* TODO: parsing JSON */
+
+
 	/* Writing response */
 	strcpy(buf, "HTTP/1.1 200 OK\r\n");
 	n_bytes = write(conn_sock, buf, strlen(buf));

@@ -16,4 +16,4 @@ incdir = include_directories('include')
 executable('isocat',
 	src,
 	include_directories : incdir,
-	c_args: ['-D_POSIX_C_SOURCE=200112L'],)
+	c_args: ['-D_POSIX_C_SOURCE=200112L', '-Wwrite-strings'],)
