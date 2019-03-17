@@ -24,4 +24,4 @@ ISOCat преобразует полученные http-запросы в фин
 * [libuv](http://libuv.org/)
 * [criterion](https://github.com/Snaipe/Criterion)
 * [zflog](https://github.com/wonder-mice/zf_log)
-
+* [cJSON](https://github.com/DaveGamble/cJSON)
