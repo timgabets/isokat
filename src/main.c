@@ -2,6 +2,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,19 +18,26 @@
 typedef struct {
 	size_t len;
 	char* data;
+	bool has_content_type;
+	bool content_is_json;
 } http_msg_ctx_t;
+
 
 int header_field_cb(http_parser* p, const char *at, size_t length)
 {
-	// TODO: checking Content-Type and Content-Length
-	ZF_LOGI_MEM(at, length, "%zu bytes", length);
+	http_msg_ctx_t *msg_ctx = (http_msg_ctx_t *) p->data;
+	if(memcmp(at, "Content-Type", length) == 0)
+		msg_ctx->has_content_type = true;
 	return 0;
 }
 
 int header_value_cb(http_parser* p, const char *at, size_t length)
 {
-	// TODO: checking Content-Type and Content-Length
-	ZF_LOGI_MEM(at, length, "%zu bytes", length);
+	http_msg_ctx_t *msg_ctx = (http_msg_ctx_t *) p->data;
+	if(msg_ctx->has_content_type == true && msg_ctx->content_is_json == false) {
+		if(memcmp(at, "application/json", length) == 0)
+			msg_ctx->content_is_json = true;
+	}
 	return 0;
 }
 
@@ -44,7 +52,7 @@ int body_cb(http_parser* p, const char *at, size_t length)
 
 http_msg_ctx_t* process_http_request(const char* buf, size_t n_bytes)
 {
-	http_msg_ctx_t *msg_ctx = malloc(sizeof(msg_ctx));
+	http_msg_ctx_t *msg_ctx = calloc(1, sizeof(msg_ctx));
 	if(msg_ctx == NULL) {
 		ZF_LOGE("malloc() error");
 		return NULL;
@@ -138,6 +146,12 @@ int main(int argc, char* argv[])
 	http_msg_ctx_t *ctx = process_http_request(buf, n_bytes);
 	if(ctx == NULL)
 		return -1;
+
+	if(!ctx->has_content_type || !ctx->content_is_json) {
+		ZF_LOGF("Content-Type is not application/json as expected");
+		free(ctx);
+		return -1;
+	}
 
 	ZF_LOGI_MEM(ctx->data, ctx->len, "Body data (%zu bytes):", ctx->len);
 
