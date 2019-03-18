@@ -1,5 +1,5 @@
 project('isocat', 'c',
-	version: '0.1.2',
+	version: '0.1.3',
 	default_options: [
 		'c_std=c11',
 		'werror=true',
@@ -8,6 +8,7 @@ project('isocat', 'c',
 src = [
   'src/zf_log.c',
   'src/http_parser.c',
+  'src/cJSON.c',
   'src/main.c'
 ]
 
