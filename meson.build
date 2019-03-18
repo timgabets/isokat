@@ -6,6 +6,7 @@ project('isocat', 'c',
 	])
 
 src = [
+  'src/formats/common.c',
   'src/zf_log.c',
   'src/http_parser.c',
   'src/cJSON.c',
