@@ -1,4 +1,4 @@
-project('isocat', 'c',
+project('isokat', 'c',
 	version: '0.1.3',
 	default_options: [
 		'c_std=c11',
@@ -15,7 +15,7 @@ src = [
 
 incdir = include_directories('include')
 
-executable('isocat',
+executable('isokat',
 	src,
 	include_directories : incdir,
 	c_args: ['-D_POSIX_C_SOURCE=200112L', '-Wwrite-strings'],)
