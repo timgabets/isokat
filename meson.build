@@ -5,17 +5,29 @@ project('isokat', 'c',
 		'werror=true',
 	])
 
+default_args = ['-D_POSIX_C_SOURCE=200112L', '-Wwrite-strings']
+dep_criterion = dependency('criterion')
+
 src = [
   'src/formats/common.c',
   'src/zf_log.c',
   'src/http_parser.c',
   'src/cJSON.c',
-  'src/main.c'
 ]
 
 incdir = include_directories('include')
 
 executable('isokat',
-	src,
+	src, 'src/main.c',
 	include_directories : incdir,
-	c_args: ['-D_POSIX_C_SOURCE=200112L', '-Wwrite-strings'],)
+	c_args: default_args)
+
+src_tests = [
+	'tests/formats/test_common.c',
+]
+
+test('iddqd', executable('tests',
+	src, src_tests,
+	dependencies: dep_criterion,
+	include_directories : incdir,
+	c_args: default_args))
