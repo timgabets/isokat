@@ -14,3 +14,11 @@ void common_msg_free(msg_common_t* msg)
 {
 	free(msg);
 }
+
+msg_common_t* json_to_common(cJSON* json)
+{
+	if(json == NULL)
+		return NULL;
+	msg_common_t* msg = common_msg_new();
+	return msg;
+}
