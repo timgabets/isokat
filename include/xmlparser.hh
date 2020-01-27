@@ -1,2 +1,0 @@
-void parseXmlFile(const char*);
-
