@@ -79,7 +79,7 @@ http_msg_ctx_t* process_http_request(const char* buf, size_t n_bytes)
 			free(msg_ctx);
 			return NULL;
 		}
-		ZF_LOGE("Processing %s HTTP request...", http_method_str(p->method));
+		ZF_LOGE("Processing %s request...", http_method_str(p->method));
 	}
 	free(p);
 	return msg_ctx;
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
 	struct addrinfo hint;
 	memset(&hint, 0, sizeof(hint));
 
-	hint.ai_family = AF_UNSPEC;
+	hint.ai_family = AF_INET;
 	hint.ai_socktype = SOCK_STREAM;
 	hint.ai_protocol = IPPROTO_TCP;
 	struct addrinfo *res;
@@ -160,6 +160,7 @@ int main(int argc, char* argv[])
 	if(parsed == NULL) {
 		ZF_LOGF("JSON parse error");
 	}
+	printf("%s\n", cJSON_Print(parsed));
 
 	/* Writing response */
 	strcpy(buf, "HTTP/1.1 200 OK\r\n");

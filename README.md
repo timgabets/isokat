@@ -14,7 +14,7 @@ ISOKat преобразует полученные http-запросы в фин
     ninja
 
 ## Testing with curl
-> curl --header "Content-Type: application/json" --request GET --data '{"username":"xyz","password":"xyz"}' localhost:8080
+> curl --header "Content-Type: application/json" --request GET --data '{"i000":"0100","i002":"4444000011112222"}' localhost:8080
 
 
 ### Используемые библиотеки

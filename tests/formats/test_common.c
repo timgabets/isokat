@@ -4,6 +4,25 @@
 #include "formats/common.h"
 #include "cJSON.h"
 
+
+Test(get_de_index_from_string, error)
+{
+	cr_expect(eq(int, get_de_index_from_string(""), -1));
+	cr_expect(eq(int, get_de_index_from_string("i"), -1));
+	cr_expect(eq(int, get_de_index_from_string("x0"), -1));
+	cr_expect(eq(int, get_de_index_from_string("de02"), -1));
+	cr_expect(eq(int, get_de_index_from_string("ix03"), -1));
+}
+
+Test(get_de_index_from_string, ok)
+{
+	cr_expect(eq(int, get_de_index_from_string("i000"), 0));
+	cr_expect(eq(int, get_de_index_from_string("i001"), 1));
+	cr_expect(eq(int, get_de_index_from_string("i002"), 2));
+	cr_expect(eq(int, get_de_index_from_string("i096"), 96));
+	cr_expect(eq(int, get_de_index_from_string("i999"), 999));
+}
+
 Test(test_common, json_to_common_nullptr)
 {
 	msg_common_t* msg = json_to_common(NULL);
@@ -19,14 +38,16 @@ Test(test_common, json_to_common)
 	msg_common_t* msg = json_to_common(parsed);
 	cr_assert(ne(ptr, msg, NULL));
 
-	cr_assert(ne(ptr, msg->element[0], NULL));
-	cr_expect(eq(str, msg->element[0], (char*) "0100"));
-/*
-	cr_assert(ne(ptr, msg->element[2], NULL));
-	cr_assert(eq(str, msg->element[2], (char*) "521324000000");
+	cr_assert(ne(ptr, msg->elements[0], NULL));
+	cr_expect(eq(str, msg->elements[0], (char*) "0100"));
 
-	cr_assert(ne(ptr, msg->element[3], NULL));
-	cr_assert(eq(str, msg->element[3], (char*) "310000"));
-*/
+	cr_assert(ne(ptr, msg->elements[2], NULL));
+	cr_assert(eq(str, msg->elements[2], (char*) "521324000000"));
+
+	cr_assert(ne(ptr, msg->elements[3], NULL));
+	cr_assert(eq(str, msg->elements[3], (char*) "310000"));
+
+	cJSON_Delete(parsed);
 	common_msg_free(msg);
 }
+

@@ -5,7 +5,7 @@ project('isokat', 'c',
 		'werror=true',
 	])
 
-default_args = ['-D_POSIX_C_SOURCE=200112L', '-Wwrite-strings']
+default_args = ['-D_POSIX_C_SOURCE=200112L', '-D_XOPEN_SOURCE=500', '-Wwrite-strings']
 dep_criterion = dependency('criterion')
 
 src = [
