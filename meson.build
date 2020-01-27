@@ -10,9 +10,10 @@ dep_criterion = dependency('criterion')
 
 src = [
   'src/formats/common.c',
-  'src/zf_log.c',
-  'src/http_parser.c',
   'src/cJSON.c',
+  'src/http.c',
+  'src/http_parser.c',
+  'src/zf_log.c',
 ]
 
 incdir = include_directories('include')

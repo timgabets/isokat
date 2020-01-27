@@ -20,8 +20,6 @@ ISOKat преобразует полученные http-запросы в фин
 ### Используемые библиотеки
 * meson
 * libconfig
-* [kcgi](https://kristaps.bsd.lv/kcgi/)
-* [libuv](http://libuv.org/)
 * [criterion](https://github.com/Snaipe/Criterion)
 * [zflog](https://github.com/wonder-mice/zf_log)
 * [cJSON](https://github.com/DaveGamble/cJSON)

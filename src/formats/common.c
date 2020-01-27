@@ -19,7 +19,6 @@ void common_msg_free(msg_common_t* msg)
 	free(msg);
 }
 
-
 int32_t get_de_index_from_string(const char* de_index)
 {
 	if(de_index == NULL || de_index[0] != 'i' || strlen(de_index) < 2)
@@ -58,7 +57,6 @@ msg_common_t* json_to_common(cJSON* json)
 		msg->elements[index] = strdup(i->valuestring);
 		if(msg->elements[index] == NULL)
 			ZF_LOGE("strdup() error");
-
 	}
 	return msg;
 }
