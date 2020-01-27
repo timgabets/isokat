@@ -25,10 +25,17 @@ executable('isokat',
 
 src_tests = [
 	'tests/formats/test_common.c',
+	'tests/test_http.c',
 ]
 
-test('iddqd', executable('tests',
-	src, src_tests,
-	dependencies: dep_criterion,
-	include_directories : incdir,
-	c_args: default_args))
+foreach filename : src_tests
+    t = filename.split('.c')[0].split('/')
+
+    test_args = '--color=always'
+    
+    test(t[-1], executable(t[-1], filename,
+				src,
+				dependencies: dep_criterion,
+				include_directories : incdir,
+				c_args: default_args))
+endforeach
