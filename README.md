@@ -22,4 +22,5 @@ ISOKat преобразует полученные http-запросы в фин
 * libconfig
 * [criterion](https://github.com/Snaipe/Criterion)
 * [zflog](https://github.com/wonder-mice/zf_log)
+* [http-parser](https://github.com/nodejs/http-parser)
 * [cJSON](https://github.com/DaveGamble/cJSON)

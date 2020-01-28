@@ -27,27 +27,18 @@ void http_msg_ctx_free(http_msg_ctx_t *ctx)
 
 static int header_field_cb(http_parser* p, const char *at, size_t length)
 {
-	/* FIXME: 
-	==5397==ERROR: AddressSanitizer: global-buffer-overflow on address 0x00000042288d at pc 0x7f8498d2bfdd bp 0x7fff71261570 sp 0x7fff71260d18
-	READ of size 14 at 0x00000042288d thread T0
-	    #0 0x7f8498d2bfdc  (/lib64/libasan.so.5+0xbcfdc)
-	    #1 0x40e084 in header_field_cb ../src/http.c:31
-	    #2 0x414a73 in http_parser_execute ../src/http_parser.c:1376
-	    #3 0x40e387 in process_http_request ../src/http.c:72
-	    #4 0x40227c in http_get_impl ../tests/test_http.c:18
-	*/
 	http_msg_ctx_t *msg_ctx = (http_msg_ctx_t *) p->data;
-	if(memcmp(at, "Content-Type", length) == 0)
+	if(strncmp(at, "Content-Type", length) == 0) {
 		msg_ctx->has_content_type = true;
+	}
 	return 0;
 }
 
 static int header_value_cb(http_parser* p, const char *at, size_t length)
 {
-	return 0;
 	http_msg_ctx_t *msg_ctx = (http_msg_ctx_t *) p->data;
 	if(msg_ctx->has_content_type == true && msg_ctx->content_is_json == false) {
-		if(memcmp(at, "application/json", length) == 0)
+		if(strncmp(at, "application/json", length) == 0)
 			msg_ctx->content_is_json = true;
 	}
 	return 0;
@@ -83,12 +74,12 @@ http_msg_ctx_t* process_http_request(const char* buf, size_t n_bytes)
 		ZF_LOGE("Error processing request: %d", p->http_errno);
 	} else {
 		if(p->method != HTTP_GET) {
-			ZF_LOGE("%s method is not supported (yet)", http_method_str(p->method));
+			ZF_LOGE("%s method is not supported", http_method_str(p->method));
 			free(p);
 			http_msg_ctx_free(msg_ctx);
 			return NULL;
 		}
-		ZF_LOGE("Processing %s request...", http_method_str(p->method));
+		ZF_LOGI("Processing %s request...", http_method_str(p->method));
 	}
 	free(p);
 	return msg_ctx;

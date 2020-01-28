@@ -12,14 +12,15 @@ src = [
   'src/formats/common.c',
   'src/cJSON.c',
   'src/http.c',
-  'src/http_parser.c',
   'src/zf_log.c',
+  'src/http_parser.c',
 ]
 
 incdir = include_directories('include')
 
 executable('isokat',
-	src, 'src/main.c',
+	src, 
+	'src/main.c',
 	include_directories : incdir,
 	c_args: default_args)
 
