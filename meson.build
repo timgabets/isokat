@@ -5,26 +5,33 @@ project('isokat', 'c',
 		'werror=true',
 	])
 
+cc = meson.get_compiler('c')
+
 default_args = ['-D_POSIX_C_SOURCE=200112L', '-D_XOPEN_SOURCE=500', '-Wwrite-strings']
 dep_criterion = dependency('criterion')
+dep_libxml = dependency('libxml-2.0', required: true)
 
 src = [
   'src/formats/common.c',
+  'src/formats/xml.c',
   'src/cJSON.c',
   'src/http.c',
-  'src/http_parser.c',
   'src/zf_log.c',
+  'src/http_parser.c',
 ]
 
 incdir = include_directories('include')
 
 executable('isokat',
-	src, 'src/main.c',
+	src, 
+	'src/main.c',
 	include_directories : incdir,
+	dependencies: dep_libxml,
 	c_args: default_args)
 
 src_tests = [
 	'tests/formats/test_common.c',
+	'tests/formats/test_xml.c',
 	'tests/test_http.c',
 ]
 
@@ -35,7 +42,7 @@ foreach filename : src_tests
     
     test(t[-1], executable(t[-1], filename,
 				src,
-				dependencies: dep_criterion,
+				dependencies: [dep_criterion, dep_libxml],
 				include_directories : incdir,
 				c_args: default_args))
 endforeach
