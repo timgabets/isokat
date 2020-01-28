@@ -91,6 +91,7 @@ Test(xml, xml_serialize_request_nullptr)
 Test(xml, xml_serialize_request_dummy)
 {   
     msg_common_t* msg = common_msg_new();
+    msg->id = 744321;
     msg->elements[0] = strdup("0120");
     msg->elements[2] = strdup("4444000011112222");
 
@@ -100,7 +101,13 @@ Test(xml, xml_serialize_request_dummy)
     cr_assert(eq(int, xml_serialize_request(msg, &buf, &n_bytes), OK));
     cr_expect(ne(ptr, buf, NULL));
     cr_expect(ne(int, n_bytes, 0));
-    cr_expect(eq(str, buf, (char*)"<?xml version=\"1.0\"?>\n<RequestInput><i000>0120</i000><i002>4444000011112222</i002></RequestInput>\n"));
+    cr_expect(eq(str, buf, (char*)"<?xml version=\"1.0\"?>\n"
+        "<RequestInput>"
+        "<Header><MessageID>744321</MessageID><SystemID>ISOKat</SystemID></Header>"
+        "<ISO8583-87>"
+        "<i000>0120</i000><i002>4444000011112222</i002>"
+        "</ISO8583-87>"
+        "</RequestInput>\n"));
 
     common_msg_free(msg);
     free(buf);

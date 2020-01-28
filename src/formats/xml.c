@@ -37,6 +37,47 @@
  </RequestInput>
  */
 
+static isokat_rc_t add_xml_header(xmlNodePtr root, msg_common_t *msg)
+{
+	xmlNodePtr hdr_node = xmlNewChild(root, NULL, BAD_CAST "Header", NULL);
+	if(hdr_node == NULL)
+		return VALUE_ERROR;
+	
+	char message_id[16] = {0};
+	snprintf(message_id, 16, "%d", msg->id);
+	if(xmlNewChild(hdr_node, NULL, BAD_CAST "MessageID", BAD_CAST message_id) == NULL) {
+		ZF_LOGE("Error creating MessageID tag");
+		return VALUE_ERROR;
+	}
+
+	/* TODO: take MessageID from configuration */
+	if(xmlNewChild(hdr_node, NULL, BAD_CAST "SystemID", BAD_CAST "ISOKat") == NULL) {
+		ZF_LOGE("Error creating SystemID tag");
+		return VALUE_ERROR;
+	}
+
+	return OK;
+}
+
+static isokat_rc_t add_xml_body(xmlNodePtr root, msg_common_t *msg, const char* body_tag_name)
+{
+	xmlNodePtr body_node = xmlNewChild(root, NULL, BAD_CAST body_tag_name, NULL);
+	if(body_node == NULL)
+		return VALUE_ERROR;
+
+	for(size_t i = 0; i < MAX_DE_INDEX; i++){
+		if(msg->elements[i] != NULL) {
+			char node_name[8] = {0};
+			snprintf(node_name, 8, "i%03lu", i);
+			if(xmlNewChild(body_node, NULL, BAD_CAST node_name, BAD_CAST msg->elements[i]) == NULL) {
+				ZF_LOGE("Error creating %s tag", node_name);
+				return VALUE_ERROR;
+			}
+		} 
+	}
+	return OK;
+}
+
 isokat_rc_t xml_serialize_request(msg_common_t *msg, char **buf, int32_t *n_bytes)
 {
 	isokat_rc_t rc = OK;
@@ -46,15 +87,19 @@ isokat_rc_t xml_serialize_request(msg_common_t *msg, char **buf, int32_t *n_byte
 
 	*n_bytes = -1;
 	xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
-	xmlNodePtr root_node = xmlNewNode(NULL, BAD_CAST "RequestInput");
-	xmlDocSetRootElement(doc, root_node);
+	xmlNodePtr root = xmlNewNode(NULL, BAD_CAST "RequestInput");
+	xmlDocSetRootElement(doc, root);
 
-	for(size_t i = 0; i < MAX_DE_INDEX; i++){
-		if(msg->elements[i] != NULL) {
-			char node_name[8] = {0};
-			snprintf(node_name, 8, "i%03lu", i);
-			xmlNewChild(root_node, NULL, BAD_CAST node_name, BAD_CAST msg->elements[i]);
-		} 
+	rc = add_xml_header(root, msg);
+	if(rc != OK) {
+		xmlFreeDoc(doc);
+		return rc;
+	}
+
+	rc = add_xml_body(root, msg, "ISO8583-87");
+	if(rc != OK) {
+		xmlFreeDoc(doc);
+		return rc;
 	}
 
 	xmlDocDumpMemory(doc, (xmlChar**) buf, n_bytes);

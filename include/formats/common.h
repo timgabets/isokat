@@ -7,6 +7,7 @@
 #define MAX_DE_INDEX 192
 
 typedef struct msg_common {
+	uint32_t id;
 	char channel[4];
 	char* elements[MAX_DE_INDEX];
 } msg_common_t;
