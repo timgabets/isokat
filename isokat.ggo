@@ -1,0 +1,10 @@
+package "isokat"
+description "ISO8583 testing toolkit"
+
+#args "--file-name=cmdline_front --func-name=cmdline_front --arg-struct-name=gengetopt_args_front --long-help"
+
+option "config" f
+	"Path to configuration file."
+	typestr="PATH"
+	string
+	optional

@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "cmdline.h"
 #include "context.h"
 #include "http.h"
 #include "http_parser.h"
@@ -19,6 +20,10 @@
 
 int main(int argc, char* argv[])
 {
+	struct gengetopt_args_info args_info;
+	if(cmdline_parser(argc, argv, &args_info) != 0)
+		return -1;
+
 	isokat_ctx_t *ctx = isokat_ctx_new();
 	if(ctx == NULL) {
 		ZF_LOGF("Error allocating context");
