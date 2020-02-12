@@ -1,12 +1,11 @@
 project('isokat', 'c',
-	version: '0.1.3',
+	version: '0.1.4',
 	default_options: [
 		'c_std=c11',
 		'werror=true',
 	])
 
 cc = meson.get_compiler('c')
-version = meson.project_version()
 
 cdata = configuration_data()
 cdata.set_quoted('VERSION', meson.project_version())
