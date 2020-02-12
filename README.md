@@ -20,6 +20,7 @@ ISOKat преобразует полученные http-запросы в фин
 ### Используемые библиотеки
 * meson
 * libconfig
+* libxml2
 * [criterion](https://github.com/Snaipe/Criterion)
 * [zflog](https://github.com/wonder-mice/zf_log)
 * [http-parser](https://github.com/nodejs/http-parser)

@@ -34,6 +34,7 @@ executable('isokat',
 src_tests = [
 	'tests/formats/test_common.c',
 	'tests/formats/test_xml.c',
+	'tests/test_context.c',
 	'tests/test_http.c',
 ]
 
