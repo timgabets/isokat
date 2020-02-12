@@ -10,11 +10,13 @@ cc = meson.get_compiler('c')
 default_args = ['-D_POSIX_C_SOURCE=200112L', '-D_XOPEN_SOURCE=500', '-Wwrite-strings']
 dep_criterion = dependency('criterion')
 dep_libxml = dependency('libxml-2.0', required: true)
+dep_libconfig = dependency('libconfig', version: '>=1.7', required: true)
 
 src = [
   'src/formats/common.c',
   'src/formats/xml.c',
   'src/cJSON.c',
+  'src/context.c',
   'src/http.c',
   'src/zf_log.c',
   'src/http_parser.c',
@@ -26,7 +28,7 @@ executable('isokat',
 	src, 
 	'src/main.c',
 	include_directories : incdir,
-	dependencies: dep_libxml,
+	dependencies: [dep_libxml, dep_libconfig],
 	c_args: default_args)
 
 src_tests = [

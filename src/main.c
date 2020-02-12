@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include "context.h"
 #include "http.h"
 #include "http_parser.h"
 #include "formats/common.h"
@@ -18,6 +19,12 @@
 
 int main(int argc, char* argv[])
 {
+	isokat_ctx_t *ctx = isokat_ctx_new();
+	if(ctx == NULL) {
+		ZF_LOGF("Error allocating context");
+		return -1;
+	}
+
 	int s = socket(PF_INET, SOCK_STREAM, 0);
 	if(s < 0) {
 		ZF_LOGF("socket() error: %s", strerror(errno));
@@ -75,19 +82,19 @@ int main(int argc, char* argv[])
 	} else
 		ZF_LOGI_MEM(buf, n_bytes, "%d bytes received", n_bytes);
 
-	http_msg_ctx_t *ctx = process_http_request(buf, n_bytes);
-	if(ctx == NULL)
+	http_msg_ctx_t *msg_ctx = process_http_request(buf, n_bytes);
+	if(msg_ctx == NULL)
 		return -1;
 
-	if(!ctx->has_content_type || !ctx->content_is_json) {
+	if(!msg_ctx->has_content_type || !msg_ctx->content_is_json) {
 		ZF_LOGF("Content-Type is not application/json as expected");
-		free(ctx);
+		free(msg_ctx);
 		return -1;
 	}
 
-	ZF_LOGI_MEM(ctx->data, ctx->len, "Body data (%zu bytes):", ctx->len);
+	ZF_LOGI_MEM(msg_ctx->data, msg_ctx->len, "Body data (%zu bytes):", msg_ctx->len);
 
-	cJSON *parsed = cJSON_Parse(ctx->data);
+	cJSON *parsed = cJSON_Parse(msg_ctx->data);
 	if(parsed == NULL) {
 		ZF_LOGF("JSON parse error");
 	}
@@ -112,6 +119,7 @@ int main(int argc, char* argv[])
 	else
 		ZF_LOGE("Error closing socket: %s", strerror(errno));
 
+	isokat_ctx_free(ctx);
 	return 0;
 }
 
