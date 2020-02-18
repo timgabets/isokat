@@ -9,6 +9,7 @@ cc = meson.get_compiler('c')
 
 cdata = configuration_data()
 cdata.set_quoted('VERSION', meson.project_version())
+cdata.set_quoted('TOPDIR', meson.current_source_dir())
 config_h = configure_file(output: 'config.h', configuration: cdata)
 
 default_args = ['-D_POSIX_C_SOURCE=200112L', '-D_XOPEN_SOURCE=500', '-Wwrite-strings', '-DHAVE_CONFIG_H']

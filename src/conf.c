@@ -12,7 +12,6 @@ isokat_rc_t parse_config(isokat_ctx_t *ctx, const char* filename)
 	config_t conf;
 
 	config_init(&conf);
-	config_set_include_dir(&conf, "../tests");
 	ZF_LOGI("Parsing configuration file %s", filename);
 
 	if(config_read_file(&conf, filename) == CONFIG_FALSE) {

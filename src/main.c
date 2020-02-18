@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "cmdline.h"
+#include "conf.h"
 #include "context.h"
 #include "http.h"
 #include "http_parser.h"
@@ -21,6 +22,7 @@
 int main(int argc, char* argv[])
 {
 	struct gengetopt_args_info args_info;
+	char* config_file_path = NULL;
 	if(cmdline_parser(argc, argv, &args_info) != 0)
 		return -1;
 
@@ -29,6 +31,14 @@ int main(int argc, char* argv[])
 		ZF_LOGF("Error allocating context");
 		return -1;
 	}
+
+	if(args_info.config_given)
+		config_file_path = args_info.config_arg;
+	else
+		config_file_path = (char*) "/etc/isokat/isokat.conf";
+	isokat_rc_t rc = parse_config(ctx, config_file_path);
+	if(rc != OK)
+		return -1;
 
 	int s = socket(PF_INET, SOCK_STREAM, 0);
 	if(s < 0) {
