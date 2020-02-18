@@ -6,25 +6,17 @@
 #include "conf.h"
 #include "retcodes.h"
 
-isokat_rc_t parse_config(isokat_ctx_t *ctx, const char* filename)
-{
-	if(ctx == NULL || filename == NULL)
-		return VALUE_ERROR;
-
-	config_t conf;
-
-	config_init(&conf);
-	ZF_LOGI("Parsing configuration file %s", filename);
-
-	if(config_read_file(&conf, filename) == CONFIG_FALSE) {
-		ZF_LOGE("Error parsing configuration file %s:%d (%s)", 
-			config_error_file(&conf), config_error_line(&conf), config_error_text(&conf));
-			config_destroy(&conf);
-			return VALUE_ERROR;
-		return PARSE_ERROR;
+static isokat_rc_t _conf_listener(isokat_ctx_t *ctx, config_t *conf) {
+	if(config_lookup_int(conf, "listener.port", &(ctx->port)) != CONFIG_TRUE) {
+		ZF_LOGW("Using default listener port 8080");
+		ctx->port = 8080;
 	}
+	
+	return OK;
+}
 
-	config_setting_t *s = config_lookup(&conf, "channels");
+static isokat_rc_t _conf_channels(isokat_ctx_t *ctx, config_t *conf) {
+	config_setting_t *s = config_lookup(conf, "channels");
 	if(s != NULL && config_setting_is_list(s) == CONFIG_TRUE) {
 		size_t n_channels = config_setting_length(s);
 		for(size_t i = 0; i < n_channels; i++) {
@@ -133,6 +125,36 @@ isokat_rc_t parse_config(isokat_ctx_t *ctx, const char* filename)
 		}
 	}
 
-	config_destroy(&conf);
 	return OK;
+}
+
+isokat_rc_t parse_config(isokat_ctx_t *ctx, const char* filename)
+{
+	if(ctx == NULL || filename == NULL)
+		return VALUE_ERROR;
+
+	config_t conf;
+	isokat_rc_t rc = OK;
+
+	config_init(&conf);
+	ZF_LOGI("Parsing configuration file %s", filename);
+
+	if(config_read_file(&conf, filename) == CONFIG_FALSE) {
+		ZF_LOGE("Error parsing configuration file %s:%d (%s)", 
+			config_error_file(&conf), config_error_line(&conf), config_error_text(&conf));
+			config_destroy(&conf);
+			return VALUE_ERROR;
+		return PARSE_ERROR;
+	}
+
+	rc = _conf_listener(ctx, &conf);
+	if(rc != OK)
+		return rc;
+
+	rc = _conf_channels(ctx, &conf);
+	if(rc != OK)
+		return rc;
+
+	config_destroy(&conf);
+	return rc;
 }
