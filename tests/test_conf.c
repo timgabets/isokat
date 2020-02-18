@@ -28,7 +28,7 @@ Test(parse_config, ok)
 	const char* filename = TOPDIR "/tests/data/isokat.conf";
 
 	cr_assert(eq(int, parse_config(ctx, filename), OK));
-	cr_expect(eq(int, ctx->port, 8081));
+	cr_expect(eq(str, ctx->port, (char*) "8081"));
 	cr_assert(eq(int, ctx->n_channels, 3));	
 
 	channel_t *ch = ctx->channels[0];

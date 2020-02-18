@@ -8,7 +8,7 @@ Test(context, new_free)
 	isokat_ctx_t *ctx = isokat_ctx_new();	
 	cr_assert(ne(ptr, ctx, NULL));
 
-	ctx->port = 8888;
+	ctx->port = strdup("8888");
 
 	isokat_ctx_free(ctx);
 }
@@ -30,7 +30,7 @@ Test(channels, add)
 	isokat_ctx_t *ctx = isokat_ctx_new();	
 	cr_assert(ne(ptr, ctx, NULL));
 
-	ctx->port = 8888;
+	ctx->port = strdup("8888");
 
 	channel_t *visa = channel_new();	
 	cr_assert(ne(ptr, visa, NULL));

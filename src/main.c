@@ -50,8 +50,6 @@ int main(int argc, char* argv[])
 	if(setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) != 0)
 		ZF_LOGW("Error setting SO_REUSEADDR: %s", strerror(errno));
 
-	const char* host = "localhost";
-	const char* service = "8080";
 	struct addrinfo hint;
 	memset(&hint, 0, sizeof(hint));
 
@@ -60,7 +58,7 @@ int main(int argc, char* argv[])
 	hint.ai_protocol = IPPROTO_TCP;
 	struct addrinfo *res;
 
-	if(getaddrinfo(host, service, &hint, &res) != 0) {
+	if(getaddrinfo("localhost", ctx->port, &hint, &res) != 0) {
 		ZF_LOGF("getaddrinfo() error: %s", strerror(errno));
 		return -1;
 	}
@@ -77,7 +75,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	ZF_LOGI("Listening to %s:%s", host, service);
+	ZF_LOGI("Listening to %s:%s", "localhost", ctx->port);
 
 	struct sockaddr addr;
 	socklen_t addrlen = sizeof(addr);

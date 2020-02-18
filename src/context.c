@@ -34,6 +34,8 @@ void isokat_ctx_free(isokat_ctx_t *ctx)
 {
 	if(ctx == NULL)
 		return;
+	if(ctx->port != NULL)
+		free(ctx->port);
 	if(ctx->channels != NULL) {
 		for(size_t i = 0 ; i < ctx->n_channels; i++)
 			channel_free(ctx->channels[i]);

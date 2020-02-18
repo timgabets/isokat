@@ -27,7 +27,7 @@ typedef struct channel {
 } channel_t;
 
 typedef struct isokat_context {
-	int port;
+	char* port;
 	size_t n_channels;
 	channel_t **channels;
 } isokat_ctx_t;

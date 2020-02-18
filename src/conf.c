@@ -7,10 +7,16 @@
 #include "retcodes.h"
 
 static isokat_rc_t _conf_listener(isokat_ctx_t *ctx, config_t *conf) {
-	if(config_lookup_int(conf, "listener.port", &(ctx->port)) != CONFIG_TRUE) {
-		ZF_LOGW("Using default listener port 8080");
-		ctx->port = 8080;
+	int port = 8080;
+	if(config_lookup_int(conf, "listener.port", &port) != CONFIG_TRUE) {
+		ZF_LOGW("Using default listener port %d", port);
 	}
+
+	char port_str[8] = {0};
+	sprintf(port_str, "%d", port);
+	ctx->port = strdup(port_str);
+	if(ctx->port == NULL)
+		return ALLOC_ERROR;
 	
 	return OK;
 }
