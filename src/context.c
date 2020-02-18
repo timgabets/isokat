@@ -19,8 +19,6 @@ void channel_free(channel_t *ch)
 		free(ch->name);
 	if(ch->host != NULL)
 		free(ch->host);
-	if(ch->port != NULL)
-		free(ch->port);
 	free(ch);
 }
 
@@ -40,8 +38,11 @@ void isokat_ctx_free(isokat_ctx_t *ctx)
 		free(ctx->host);
 	if(ctx->service != NULL)
 		free(ctx->service);
-	for(size_t i = 0 ; i < ctx->n_channels; i++)
-		channel_free(ctx->channels[i]);
+	if(ctx->channels != NULL) {
+		for(size_t i = 0 ; i < ctx->n_channels; i++)
+			channel_free(ctx->channels[i]);
+		free(ctx->channels);
+	}
 
 	free(ctx);
 }

@@ -21,7 +21,7 @@ Test(channels, new_free)
 
 	ch->name = strdup("ACQ1");
 	ch->host = strdup("localhost");
-	ch->port = strdup("22334");
+	ch->port = 22334;
 
 	channel_free(ch);
 }
@@ -39,7 +39,7 @@ Test(channels, add)
 
 	visa->name = strdup("VIS1");
 	visa->host = strdup("10.20.30.40");
-	visa->port = strdup("22334");
+	visa->port = 22334;
 
 	cr_expect(eq(int, ctx_add_channel(ctx, visa), OK));
 
@@ -48,17 +48,17 @@ Test(channels, add)
 
 	mast->name = strdup("MAS1");
 	mast->host = strdup("50.60.70.80");
-	mast->port = strdup("21653");
+	mast->port = 21653;
 
 	cr_expect(eq(int, ctx_add_channel(ctx, mast), OK));
 
 	cr_expect(eq(str, ctx->channels[0]->name, (char*) "VIS1"));
 	cr_expect(eq(str, ctx->channels[0]->host, (char*) "10.20.30.40"));
-	cr_expect(eq(str, ctx->channels[0]->port, (char*) "22334"));
+	cr_expect(eq(int, ctx->channels[0]->port, 22334));
 
 	cr_expect(eq(str, ctx->channels[1]->name, (char*) "MAS1"));
 	cr_expect(eq(str, ctx->channels[1]->host, (char*) "50.60.70.80"));
-	cr_expect(eq(str, ctx->channels[1]->port, (char*) "21653"));
+	cr_expect(eq(int, ctx->channels[1]->port, 21653));
 
 	isokat_ctx_free(ctx);
 }

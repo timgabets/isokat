@@ -21,8 +21,8 @@ typedef struct channel {
 	char* name;
 	connection_type_t remote_host_is;
 	char* host;
-	char* port;
-	bool synchronous;
+	int port;
+	bool asynchronous;
 	double timeout;
 } channel_t;
 
